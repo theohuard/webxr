@@ -18,10 +18,12 @@
 
         <script type ="module" src="./three.module.js"></script>
         <script type ="module" src="./three.min.js"></script>
+        <script type ="module" src="./GLTFLoader.js"></script>
         
 
 		<script type="module">
             import { ARButton } from './ARButton.js';
+            import {GLTFLoader} from './GLTFLoader.js';
 
 			let container;
 			let camera, scene, renderer;
@@ -62,18 +64,27 @@
 
 				//
 
-				const geometry = new THREE.CylinderGeometry( 0.1, 0.1, 0.2, 32 ).translate( 0, 0.1, 0 );
+				//const geometry = new THREE.CylinderGeometry( 0.1, 0.1, 0.2, 32 ).translate( 0, 0.1, 0 );
 
 				function onSelect() {
 
 					if ( reticle.visible ) {
+                        var stick = new THREE.Object3D();
+                        var loader = new GLTFLoader();
+                        loader.load('./can/scene.gltf', function (gltf) { 
+                            console.log(gltf.scene);
 
-						const material = new THREE.MeshPhongMaterial( { color: 'blue' } );
-						const mesh = new THREE.Mesh( geometry, material );
-						mesh.position.setFromMatrixPosition( reticle.matrix );
-						mesh.scale.y = Math.random() * 2 + 1;
-						scene.add( mesh );
+                            var canMesh = gltf.scene.getObjectByName('OSG_Scene');
 
+                            // var r = 1.065; // Parameter for the distance from the earth >1 for being in the sky
+                            canMesh.scale.set(0.05,0.05,0.05);
+                            canMesh.position.setFromMatrixPosition( reticle.matrix );
+                            stick.add( canMesh );  
+                            scene.add(stick)
+                        });
+                       
+
+						
 					}
 
 				}
