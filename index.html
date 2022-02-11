@@ -52,6 +52,22 @@
 
 				//
 
+				const spotLight = new THREE.SpotLight( 0xffffff, 2 );
+				spotLight.position.set( 1000,1000,1000 );
+
+				spotLight.castShadow = true;
+
+				spotLight.shadow.mapSize.width = 1024;
+				spotLight.shadow.mapSize.height = 1024;
+
+				spotLight.shadow.camera.near = 5;
+				spotLight.shadow.camera.far = 400;
+				spotLight.shadow.camera.fov = 3;
+
+				scene.add( spotLight );
+
+				//
+
 				renderer = new THREE.WebGLRenderer( { antialias: true, alpha: true } );
 				renderer.setPixelRatio( window.devicePixelRatio );
 				renderer.setSize( window.innerWidth, window.innerHeight );
@@ -71,13 +87,13 @@
 					if ( reticle.visible ) {
                         var stick = new THREE.Object3D();
                         var loader = new GLTFLoader();
-                        loader.load('./can/scene.gltf', function (gltf) { 
+                        loader.load('./scene.gltf', function (gltf) { 
                             console.log(gltf.scene);
 
                             var canMesh = gltf.scene.getObjectByName('OSG_Scene');
 
                             // var r = 1.065; // Parameter for the distance from the earth >1 for being in the sky
-                            canMesh.scale.set(0.05,0.05,0.05);
+                            canMesh.scale.set(0.75,0.75,0.75);
                             canMesh.position.setFromMatrixPosition( reticle.matrix );
                             stick.add( canMesh );  
                             scene.add(stick)
